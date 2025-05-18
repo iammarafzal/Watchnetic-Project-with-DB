@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Links Test Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="mb-4">Order Links Test Page</h1>
+        <p class="text-muted">This page tests different formats of order detail links to find the issue.</p>
+        
+        <div class="alert alert-info">
+            First login to your account before clicking any links.
+        </div>
+        
+        <div class="card my-4">
+            <div class="card-header">
+                <h5 class="mb-0">Test Order #1</h5>
+            </div>
+            <div class="card-body">
+                <h6>Try different link formats:</h6>
+                <div class="list-group">
+                    <a href="/order_detail/1" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        Direct URL: /order_detail/1
+                        <span class="badge bg-primary">Try</span>
+                    </a>
+                    <a href="order_detail/1" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        Relative URL: order_detail/1
+                        <span class="badge bg-primary">Try</span>
+                    </a>
+                    <a href="http://127.0.0.1:5000/order_detail/1" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        Full URL: http://127.0.0.1:5000/order_detail/1
+                        <span class="badge bg-primary">Try</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card my-4">
+            <div class="card-header">
+                <h5 class="mb-0">Other Test Orders</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="/order_detail/2" class="list-group-item list-group-item-action">Order #2</a>
+                    <a href="/order_detail/3" class="list-group-item list-group-item-action">Order #3</a>
+                    <a href="/order_detail/4" class="list-group-item list-group-item-action">Order #4</a>
+                    <a href="/order_detail/5" class="list-group-item list-group-item-action">Order #5</a>
+                </div>
+            </div>
+        </div>
+        
+        <p class="mt-4">
+            <a href="/" class="btn btn-secondary">Back to Home</a>
+        </p>
+    </div>
+</body>
+</html> 

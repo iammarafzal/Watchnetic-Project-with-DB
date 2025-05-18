@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - Watchnetic</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header_section">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg custom_nav-container">
+                <a class="navbar-brand" href="{{ url_for('index') }}">
+                    <span>Watchnetic</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('watches') }}">Watches</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('blogs') }}">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('faqs') }}">FAQs</a>
+                        </li>
+                    </ul>
+                    <div class="user_option">
+                        <form class="form-inline my-2 my-lg-0 ml-0 ml-lg-4 mb-3 mb-lg-0" action="{{ url_for('search') }}" method="GET">
+                            <input name="q" type="search" placeholder="Search" value="{{ query }}">
+                            <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit"></button>
+                        </form>
+                        {% if 'customer_id' in session %}
+                            <a href="{{ url_for('customer_profile') }}">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <span>{{ session.get('customer_name', 'Profile') }}</span>
+                            </a>
+                            <a href="{{ url_for('view_cart') }}">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            </a>
+                            <a href="{{ url_for('customer_logout') }}">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('customer_login') }}">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <span>Login</span>
+                            </a>
+                            <a href="{{ url_for('customer_register') }}">
+                                <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                <span>Register</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Search Results -->
+    <section class="watches_section layout_padding">
+        <div class="container">
+            <div class="heading_container">
+                <h2>Search Results for: <span>{{ query }}</span></h2>
+                <p>Found {{ products|length }} results</p>
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if products %}
+                <div class="watches_container">
+                    <div class="row">
+                        {% for product in products %}
+                            <div class="col-lg-4 col-md-6">
+                                <div class="box">
+                                    <div class="img-box">
+                                        <img src="{{ url_for('static', filename=product.image_url) }}" alt="">
+                                    </div>
+                                    <div class="detail-box">
+                                        <h5>{{ product.name }}</h5>
+                                        <h6>Rs. {{ "%.2f"|format(product.price) }}</h6>
+                                        <a href="{{ url_for('product_detail', product_id=product.product_id) }}">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="no-results">
+                    <p>No results found for your search. Please try another search term or browse our collection.</p>
+                    <a href="{{ url_for('watches') }}" class="btn btn-primary">Browse All Watches</a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <section class="info_section layout_padding2">
+        <div class="container">
+            <div class="info_logo">
+                <h2>Watchnetic</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="info_contact">
+                        <h5>About Shop</h5>
+                        <div>
+                            <div class="img-box">
+                                <img src="{{ url_for('static', filename='images/location-white.png') }}" width="18px" alt="">
+                            </div>
+                            <p>Address: 123 Tech Street, Digital City</p>
+                        </div>
+                        <div>
+                            <div class="img-box">
+                                <img src="{{ url_for('static', filename='images/telephone-white.png') }}" width="12px" alt="">
+                            </div>
+                            <p>+01 1234567890</p>
+                        </div>
+                        <div>
+                            <div class="img-box">
+                                <img src="{{ url_for('static', filename='images/envelope-white.png') }}" width="18px" alt="">
+                            </div>
+                            <p>support@watchnetic.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info_info">
+                        <h5>Information</h5>
+                        <p>We offer the latest in wearable technology, combining style and functionality.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info_links">
+                        <h5>Useful Links</h5>
+                        <ul>
+                            <li><a href="{{ url_for('index') }}">Home</a></li>
+                            <li><a href="{{ url_for('watches') }}">Watches</a></li>
+                            <li><a href="{{ url_for('about') }}">About</a></li>
+                            <li><a href="{{ url_for('blogs') }}">Blog</a></li>
+                            <li><a href="{{ url_for('faqs') }}">FAQs</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info_form">
+                        <h5>Newsletter</h5>
+                        <form action="">
+                            <input type="email" placeholder="Enter your email">
+                            <button>Subscribe</button>
+                        </form>
+                        <div class="social_box">
+                            <a href=""><img src="{{ url_for('static', filename='images/fb.png') }}" alt=""></a>
+                            <a href=""><img src="{{ url_for('static', filename='images/twitter.png') }}" alt=""></a>
+                            <a href=""><img src="{{ url_for('static', filename='images/linkedin.png') }}" alt=""></a>
+                            <a href=""><img src="{{ url_for('static', filename='images/instagram.png') }}" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Bottom -->
+    <section class="footer_section">
+        <div class="container">
+            <p>&copy; <span id="displayYear"></span> All Rights Reserved By Watchnetic</p>
+        </div>
+    </section>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+</body>
+</html> 

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="register, sign up, create account, watchnetic account" />
+  <meta name="description" content="Create your Watchnetic account to easily shop for the best smartwatches in Pakistan." />
+  <meta name="author" content="Watchnetic" />
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/x-icon">
+
+  <title>Register - Watchnetic</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+
+  <style>
+    .register-section {
+      padding: 80px 0;
+      background: #f8f9fa;
+    }
+    .form-container {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .register-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 25px;
+    }
+    .form-control {
+      height: 50px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      padding-left: 20px;
+    }
+    .form-control:focus {
+      box-shadow: 0 0 10px rgba(0, 140, 186, 0.2);
+      border-color: #008CBA;
+    }
+    .btn-register {
+      background: #008CBA;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: block;
+      width: 100%;
+      font-size: 16px;
+      height: 50px;
+    }
+    .btn-register:hover {
+      background: #007BA3;
+      transform: translateY(-2px);
+      box-shadow: 0 0 10px rgba(0, 140, 186, 0.6);
+    }
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .login-link a {
+      color: #008CBA;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+    .alert {
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .form-header-icon {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-header-icon i {
+      font-size: 60px;
+      color: #008CBA;
+    }
+    @media (max-width: 768px) {
+      .form-container {
+        padding: 30px 20px;
+      }
+      .register-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="sub_page">
+  <div class="hero_area">
+    
+    <!-- header section -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="{{ url_for('index') }}">
+            <span>Watchnetic</span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('watches') }}">Watches</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('blogs') }}">Blogs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('faqs') }}">FAQs</a>
+              </li>
+            </ul>
+            <div class="user_option-box">
+              <a href="{{ url_for('customer_login') }}">
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </a>
+              <a href="{{ url_for('view_cart') }}" class="position-relative">
+                <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                {% if session.get('cart') %}
+                  <span class="cart-badge">{{ session['cart']['count'] }}</span>
+                {% endif %}
+              </a>
+              <a href="#" data-toggle="modal" data-target="#searchModal">
+                <i class="fa fa-search" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+
+    <!-- Search Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="searchModalLabel">Search Products</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="{{ url_for('search') }}" method="get">
+              <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search for watches...">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i> Search
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Section -->
+  <section class="register-section">
+    <div class="container">
+      <div class="form-container">
+        <div class="form-header-icon">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        <h2 class="register-title">Create an Account</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        
+        <form action="{{ url_for('customer_register') }}" method="post">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+          </div>
+          <div class="form-group">
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+          </div>
+          <button type="submit" class="btn btn-register">Register</button>
+        </form>
+        
+        <div class="login-link">
+          Already have an account? <a href="{{ url_for('customer_login') }}">Login here</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="footer_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="footer_links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="{{ url_for('index') }}">Home</a></li>
+              <li><a href="{{ url_for('watches') }}">Watches</a></li>
+              <li><a href="{{ url_for('blogs') }}">Blogs</a></li>
+              <li><a href="{{ url_for('about') }}">About</a></li>
+              <li><a href="{{ url_for('faqs') }}">FAQs</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="footer_contact">
+            <h4>Contact Us</h4>
+            <p>Email: info@watchnetic.com</p>
+            <p>Phone: +92 1234567890</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="footer_social">
+            <h4>Follow Us</h4>
+            <div class="social_links">
+              <a href="#"><i class="fa fa-facebook"></i></a>
+              <a href="#"><i class="fa fa-twitter"></i></a>
+              <a href="#"><i class="fa fa-instagram"></i></a>
+              <a href="#"><i class="fa fa-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <p class="footer_copyright">
+            &copy; 2024 Watchnetic. All Rights Reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+  
+  <script>
+    // Password confirmation validation
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('form');
+      const password = document.getElementById('password');
+      const confirmPassword = document.getElementById('confirm_password');
+      
+      form.addEventListener('submit', function(event) {
+        if (password.value !== confirmPassword.value) {
+          event.preventDefault();
+          alert('Passwords do not match. Please try again.');
+        }
+      });
+      
+      // Real-time validation
+      confirmPassword.addEventListener('input', function() {
+        if (password.value !== confirmPassword.value) {
+          confirmPassword.setCustomValidity('Passwords do not match');
+        } else {
+          confirmPassword.setCustomValidity('');
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

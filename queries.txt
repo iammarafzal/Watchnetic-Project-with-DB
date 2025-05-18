@@ -1,0 +1,159 @@
+-- SQL Queries Used in Watchnetic Project --
+
+-- Database Connection Check
+SELECT 1
+
+-- User Authentication Queries
+-- Admin Login Check
+SELECT admin_id, username, password, email FROM Admin WHERE username = 'admin'
+SELECT password FROM Admin WHERE admin_id = %s
+
+-- Product Queries
+-- Get Latest Products
+-- (Implemented using ORM: Product.query.order_by(Product.product_id.desc()).limit(limit).all())
+
+-- Get All Products
+-- (Implemented using ORM: Product.query.all())
+
+-- Get Product by ID
+-- (Implemented using ORM: Product.query.get(product_id))
+
+-- Search Products
+-- (Implemented using ORM: Product.query.filter(db.or_(Product.name.like(search_term), Product.description.like(search_term))).all())
+
+-- Cart Queries
+-- Get Cart Items for Customer
+SELECT Cart.cart_id, Cart.customer_id, Cart.product_id, Cart.quantity,
+       Product.name, Product.price, Product.image_url 
+FROM Cart 
+JOIN Product ON Cart.product_id = Product.product_id 
+WHERE Cart.customer_id = :customer_id
+
+-- Check if Item Exists in Cart
+SELECT cart_id, quantity FROM Cart 
+WHERE customer_id = :customer_id AND product_id = :product_id
+
+-- Update Cart Item Quantity
+UPDATE Cart SET quantity = :quantity
+WHERE cart_id = :cart_id
+
+-- Add Item to Cart
+INSERT INTO Cart (customer_id, product_id, quantity)
+VALUES (:customer_id, :product_id, :quantity)
+
+-- Update Cart Item
+UPDATE Cart SET quantity = :quantity
+WHERE customer_id = :customer_id AND product_id = :product_id
+
+-- Remove Item from Cart
+DELETE FROM Cart
+WHERE customer_id = :customer_id AND product_id = :product_id
+
+-- Clear Cart
+DELETE FROM Cart
+WHERE customer_id = :customer_id
+
+-- Order Queries
+-- Get Order Details
+SELECT od.order_detail_id, od.order_id, od.product_id, od.quantity, od.price,
+       (od.quantity * od.price) as subtotal, p.name, p.image_url
+FROM Order_Detail od
+JOIN Product p ON od.product_id = p.product_id
+WHERE od.order_id = :order_id
+
+-- Database Migrations
+-- Check if Admin Table Exists
+SHOW TABLES LIKE 'Admin'
+
+-- Alter Admin Password Column
+ALTER TABLE `Admin` MODIFY `password` VARCHAR(255) NOT NULL
+
+-- Create Orders Table
+CREATE TABLE IF NOT EXISTS `orders` (
+  `order_id` int NOT NULL AUTO_INCREMENT,
+  `customer_id` int NOT NULL,
+  `order_date` datetime NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'Pending',
+  `total_amount` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`order_id`),
+  KEY `customer_id` (`customer_id`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `Customer` (`customer_id`)
+)
+
+-- Create Order_Detail Table
+CREATE TABLE IF NOT EXISTS `Order_Detail` (
+  `order_detail_id` int NOT NULL AUTO_INCREMENT,
+  `order_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `quantity` int NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `subtotal` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`order_detail_id`),
+  KEY `order_id` (`order_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `order_detail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
+  CONSTRAINT `order_detail_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `Product` (`product_id`)
+)
+
+-- Add Password Column to Customer Table
+ALTER TABLE Customer ADD COLUMN password VARCHAR(255) NOT NULL DEFAULT ''
+
+-- Object-Relational Mapping (ORM) Queries
+-- These queries are implemented using SQLAlchemy ORM:
+
+-- Get Customer by Email
+-- Customer.query.filter_by(email=email).first()
+
+-- Get Customer by ID
+-- Customer.query.get(session['customer_id'])
+
+-- Get Orders for Customer
+-- Orders.query.filter_by(customer_id=session['customer_id']).order_by(Orders.order_date.desc()).all()
+
+-- Get Order Details
+-- Order_Detail.query.filter_by(order_id=order_id).all()
+
+-- Get Shipping for Order
+-- Shipping.query.filter_by(order_id=order_id).first()
+
+-- Get Payment for Order
+-- Payment.query.filter_by(order_id=order_id).first()
+
+-- Admin Order Queries
+-- Get All Orders (with filters)
+-- query = Orders.query
+-- if status_filter: query = query.filter(Orders.status == status_filter)
+-- if search_query: query = query.join(Customer).filter(db.or_(Orders.order_id.like(f"%{search_query}%"), Customer.name.like(f"%{search_query}%")))
+-- query = query.order_by(Orders.order_date.desc())
+
+-- Delete Order and Related Records
+-- Order_Detail.query.filter_by(order_id=order_id).delete()
+-- Payment.query.filter_by(order_id=order_id).delete()
+-- Shipping.query.filter_by(order_id=order_id).delete()
+-- db.session.delete(order)
+
+-- Review Queries
+-- Get reviews for product
+SELECT r.review_id, r.customer_id, c.name AS customer_name, r.product_id, r.order_id, r.rating, r.comment, r.review_date 
+FROM Review r 
+JOIN Customer c ON r.customer_id = c.customer_id 
+WHERE r.product_id = {product_id} 
+ORDER BY r.review_date DESC
+
+-- Check for existing reviews
+SELECT review_id FROM Review 
+WHERE customer_id = {customer_id} AND product_id = {product_id} AND order_id = {order_id}
+
+-- Add a new review
+INSERT INTO Review (customer_id, product_id, order_id, rating, comment, review_date) 
+VALUES ({customer_id}, {product_id}, {order_id}, {rating}, '{comment}', NOW())
+
+-- Get customer reviews for order
+SELECT r.review_id, r.product_id, r.rating, r.comment, r.review_date 
+FROM Review r 
+WHERE r.customer_id = {customer_id} AND r.order_id = {order_id}
+
+-- Calculate average rating for product
+SELECT AVG(rating) as average_rating, COUNT(*) as review_count 
+FROM Review 
+WHERE product_id = {product_id} 

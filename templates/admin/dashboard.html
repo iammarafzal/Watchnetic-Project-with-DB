@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Watchnetic</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+    {% with active_page = 'dashboard' %}
+    {% include 'admin/components/navbar.html' %}
+    {% endwith %}
+
+    <div class="container my-4">
+        <div class="page-header mb-4">
+            <h2 class="page-title">
+                <i class="fas fa-chart-line me-2"></i> Dashboard
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                </ol>
+            </nav>
+        </div>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show">
+                        <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' or category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Stats Cards -->
+        <div class="row mt-4">
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card main-card h-100 stats-card">
+                    <div class="card-body text-center">
+                        <div class="stats-icon products mb-3">
+                            <i class="fas fa-boxes fa-lg"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Products</h5>
+                        <div class="stats-value text-primary">{{ product_count }}</div>
+                        <a href="{{ url_for('admin_products.index') }}" class="btn btn-primary btn-sm mt-2 w-100">
+                            <i class="fas fa-cog me-1"></i> Manage Products
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card main-card h-100 stats-card">
+                    <div class="card-body text-center">
+                        <div class="stats-icon orders mb-3">
+                            <i class="fas fa-shopping-cart fa-lg"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Orders</h5>
+                        <div class="stats-value text-success">{{ order_count }}</div>
+                        <a href="{{ url_for('admin_orders.index') }}" class="btn btn-success btn-sm mt-2 w-100">
+                            <i class="fas fa-cog me-1"></i> Manage Orders
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card main-card h-100 stats-card">
+                    <div class="card-body text-center">
+                        <div class="stats-icon customers mb-3">
+                            <i class="fas fa-users fa-lg"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Customers</h5>
+                        <div class="stats-value text-info">{{ customer_count }}</div>
+                        <a href="{{ url_for('admin_customers.index') }}" class="btn btn-info btn-sm mt-2 w-100">
+                            <i class="fas fa-cog me-1"></i> Manage Customers
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Recent Orders -->
+            <div class="col-lg-8 mb-4">
+                <div class="card main-card">
+                    <div class="card-header d-flex justify-content-between align-items-center py-3">
+                        <h5 class="mb-0"><i class="fas fa-shopping-bag me-2"></i> Recent Orders</h5>
+                        <span class="badge bg-primary">{{ recent_orders|length }} Orders</span>
+                    </div>
+                    <div class="card-body">
+                        {% if recent_orders %}
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in recent_orders %}
+                                        <tr>
+                                            <td>{{ order.order_id }}</td>
+                                            <td>{{ order.customer.name }}</td>
+                                            <td>{{ order.order_date.strftime('%Y-%m-%d') }}</td>
+                                            <td>Rs. {{ "%.2f"|format(order.total_amount) }}</td>
+                                            <td>
+                                                <span class="badge 
+                                                    {% if order.status == 'Completed' %}bg-success
+                                                    {% elif order.status == 'Processing' %}bg-primary
+                                                    {% elif order.status == 'Shipped' %}bg-info
+                                                    {% elif order.status == 'Cancelled' %}bg-danger
+                                                    {% else %}bg-warning{% endif %}">
+                                                    {{ order.status }}
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="{{ url_for('admin_orders.view_order', order_id=order.order_id) }}" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-eye"></i><span class="d-none d-md-inline"> View</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <a href="{{ url_for('admin_orders.index') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-list me-1"></i> View All Orders
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info d-flex align-items-center">
+                                <i class="fas fa-info-circle fs-4 me-3"></i>
+                                <div>
+                                    <p class="mb-0">No recent orders found.</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Low Stock Alert -->
+            <div class="col-lg-4 mb-4">
+                <div class="card main-card">
+                    <div class="card-header d-flex justify-content-between align-items-center py-3">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Low Stock Alert</h5>
+                        <span class="badge bg-warning text-dark">{{ low_stock_products|length }} Products</span>
+                    </div>
+                    <div class="card-body">
+                        {% if low_stock_products %}
+                            <div class="list-group">
+                                {% for product in low_stock_products %}
+                                <a href="{{ url_for('admin_products.edit', product_id=product.product_id) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <div class="text-truncate pe-2">
+                                        <span class="fw-medium">{{ product.name }}</span>
+                                    </div>
+                                    <span class="badge bg-danger rounded-pill">{{ product.stock }}</span>
+                                </a>
+                                {% endfor %}
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <a href="{{ url_for('admin_products.index') }}" class="btn btn-outline-warning">
+                                    <i class="fas fa-cubes me-1"></i> Manage Inventory
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-success d-flex align-items-center">
+                                <i class="fas fa-check-circle fs-4 me-3"></i>
+                                <div>
+                                    <p class="mb-0">All products are adequately stocked.</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

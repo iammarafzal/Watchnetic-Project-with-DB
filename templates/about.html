@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Basic -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="smartwatches in pakistan, best budget smartwatches, smart watches, cheap smart watches, smart sports watch" />
+  <meta name="description" content="At Watchnetic, we bring you the best budget smartwatches and high-quality wearables in Pakistan. Explore our collection of smart sports watches and cheap smart watches, designed for style, performance, and affordability!" />
+  <meta name="author" content="Watchnetic" />
+  <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+
+  <title>About Us - Watchnetic</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+
+  <!-- owl slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+  <!-- font awesome style -->
+  <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet" />
+
+  {% block head %}{% endblock %}
+</head>
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="{{ url_for('index') }}">
+            <span>
+              Watchnetic
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('index') }}">Home </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('watches') }}"> Watches </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('blogs') }}"> Blogs </a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('about') }}"> About <span class="sr-only">(current)</span> </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('faqs') }}"> FAQs </a>
+              </li>
+            </ul>
+            <div class="user_option-box">
+              {% if 'customer_id' in session %}
+                <a href="{{ url_for('customer_profile') }}">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                </a>
+              {% else %}
+                <a href="{{ url_for('customer_login') }}">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                </a>
+              {% endif %}
+              <a href="{{ url_for('view_cart') }}" class="position-relative">
+                <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                {% if session.get('cart') %}
+                  <span class="cart-badge">{{ session['cart']['count'] }}</span>
+                {% endif %}
+              </a>
+              <a href="#" data-toggle="modal" data-target="#searchModal">
+                <i class="fa fa-search" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+
+    <!-- Search Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="searchModalLabel">Search Products</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="{{ url_for('search') }}" method="get">
+              <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search for watches...">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i> Search
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- about section -->
+  <section class="about_section_page layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>Welcome to Watchnetic</h2>
+      </div>
+      <img src="{{ url_for('static', filename='images/best-budget-smartwatches-pakistan.png') }}" alt="Best Budget Smartwatches Pakistan">
+      <p>At Watchnetic, we are passionate about bringing you the best smartwatches in Pakistan at unbeatable prices. Whether you're looking for a feature-packed smartwatch, a stylish digital smartwatch, or a budget-friendly smartwatch, we have something for everyone. Our collection includes the latest Bluetooth smartwatches, fitness watches, and smartwatches for men, women, and even kids — all available for online delivery across Pakistan.</p>
+      
+      <h3>Our Mission</h3>
+      <p>We believe that technology and style should go hand in hand. At Watchnetic, our goal is to provide affordable smartwatches that enhance your everyday life. Whether you need a watch for fitness tracking, notifications, health monitoring, or just a sleek digital smart watch, we have you covered.</p>
+      
+      <img src="{{ url_for('static', filename='images/smart-sports-watch-for-men-women.png') }}" alt="Smart Sports Watches" style="float: right; margin-left: 20px;">
+      <h3>Our Products</h3>
+      <p>We offer a diverse selection of smartwatches in Pakistan, designed for men, women, and even kids. Our range includes:</p>
+      <ul>
+        <li>Best budget smartwatches with essential features for everyday use.</li>
+        <li>Advanced fitness watches to monitor your health and activity.</li>
+        <li>Bluetooth smartwatches for seamless connectivity.</li>
+        <li>Stylish and durable digital smartwatches for a modern look.</li>
+      </ul>
+      <p>Each watch is carefully selected to ensure quality, functionality, and durability, giving you the best value for your money.</p>
+      
+      <!-- <img src="images/.png" alt="Smartwatch Image 3"> -->
+      <h3>Quality & Innovation</h3>
+      <p>We source our best affordable smartwatches from trusted manufacturers, ensuring durability, style, and top-notch technology. Each smartwatch is designed to provide long-lasting performance with features tailored to meet the demands of modern lifestyles.</p>
+      
+      <h3>Stay Connected with Watchnetic</h3>
+      <p>Join the Watchnetic family and experience the future of wearable technology. Stay updated with our latest arrivals, special offers, and smartwatch trends by following us on social media. Explore our collection today and buy smartwatches online with confidence.</p>
+      
+      <p>Thank you for choosing Watchnetic – where technology meets style, and affordability meets quality.</p>
+    </div>
+  </section>
+  <!-- end about section -->
+
+  <!-- Footer Section -->
+  <footer class="footer_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="footer_links">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="{{ url_for('index') }}">Home</a></li>
+              <li><a href="{{ url_for('watches') }}">Watches</a></li>
+              <li><a href="{{ url_for('blogs') }}">Blogs</a></li>
+              <li><a href="{{ url_for('about') }}">About</a></li>
+              <li><a href="{{ url_for('faqs') }}">FAQs</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="footer_contact">
+            <h4>Contact Us</h4>
+            <p>Email: info@watchnetic.com</p>
+            <p>Phone: +92 1234567890</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="footer_social">
+            <h4>Follow Us</h4>
+            <div class="social_links">
+              <a href="https://www.facebook.com/watchneticofficial/" target="_blank"><i class="fa fa-facebook"></i></a>
+              <a href="#"><i class="fa fa-twitter"></i></a>
+              <a href="https://www.instagram.com/watchneticofficial/" target="_blank"><i class="fa fa-instagram"></i></a>
+              <a href="#"><i class="fa fa-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <p class="footer_copyright">
+            &copy; 2024 Watchnetic. All Rights Reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- footer section -->
+   
+  <!-- jQery -->
+  <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- custom js -->
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+
+</body>
+
+</html>
