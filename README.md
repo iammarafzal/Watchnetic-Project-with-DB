@@ -59,7 +59,7 @@ watchnetic/
 
 1. **Clone the repository**
    ```
-   git clone https://github.com/yourusername/watchnetic.git
+   git clone https://github.com/iammarafzal/watchnetic.git
    cd watchnetic
    ```
 
