@@ -4,7 +4,7 @@ from . import main
 
 @main.route('/')
 def index():
-    latest_products = Product.query.order_by(Product.product_id.desc()).limit(6).all()
+    latest_products = Product.query.order_by(Product.product_id.desc()).limit(4).all()
     return render_template('index.html', latest_products=latest_products)
 
 @main.route('/about')

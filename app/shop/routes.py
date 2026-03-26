@@ -6,9 +6,22 @@ from . import shop
 @shop.route('/watches')
 def watches():
     page = request.args.get('page', 1, type=int)
-    per_page = 9
-    products_pagination = Product.query.paginate(page=page, per_page=per_page, error_out=False)
-    return render_template('watches.html', products=products_pagination.items, pagination=products_pagination)
+    sort = request.args.get('sort', 'featured')
+    per_page = 8
+    
+    query = Product.query
+    
+    if sort == 'price_low':
+        query = query.order_by(Product.price.asc())
+    elif sort == 'price_high':
+        query = query.order_by(Product.price.desc())
+    elif sort == 'newest':
+        query = query.order_by(Product.product_id.desc())
+    else:
+        query = query.order_by(Product.product_id.asc())
+
+    products_pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+    return render_template('watches.html', products=products_pagination.items, pagination=products_pagination, current_sort=sort)
 
 @shop.route('/product/<int:product_id>')
 def product_detail(product_id):

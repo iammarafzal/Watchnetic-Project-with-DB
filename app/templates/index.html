@@ -74,7 +74,7 @@
 </div>
 
 <!-- Features Section -->
-<div class="py-12 sm:py-16 bg-white relative z-20 shadow-[0_-20px_40px_-20px_rgba(0,0,0,0.05)] rounded-t-[2rem] -mt-6">
+<div class="py-12 sm:py-16 bg-slate-50 relative z-20 overflow-hidden shadow-inner">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <div
@@ -181,9 +181,210 @@
 
         <div class="mt-10 text-center">
             <a href="{{ url_for('shop.watches') }}"
-                class="inline-flex items-center px-6 py-2.5 border border-transparent text-sm font-semibold rounded-full shadow-md text-white bg-slate-900 hover:bg-slate-800 transition-colors duration-300">
+                class="inline-flex items-center px-6 py-2.5 border border-transparent text-sm font-semibold rounded-full shadow-md text-slate-700 bg-white hover:bg-slate-50 border-slate-200 transition-colors duration-300">
                 View Entire Collection
             </a>
+        </div>
+    </div>
+</div>
+<!-- Featured In -->
+<div class="py-8 bg-slate-50 border-y border-slate-100 relative z-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p class="text-center text-xs md:text-sm font-black text-slate-800 uppercase tracking-[0.2em] mb-6 md:mb-8">
+            FEATURED <span class="text-primary-600">GLOBALLY</span></p>
+        <div
+            class="flex flex-wrap justify-center gap-8 md:gap-16 items-center opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+            <div class="flex items-center gap-2 font-black text-2xl tracking-tighter text-slate-900 relative"><span
+                    class="border-b-4 border-red-500 absolute -bottom-1 left-0 w-full rounded-full"></span>AP</div>
+            <div class="flex items-center gap-2 font-bold text-xl font-serif text-slate-800"><i
+                    class="fa-solid fa-chart-simple font-light border border-slate-800 rounded-full w-8 h-8 flex items-center justify-center"></i>
+                Vocal</div>
+            <div class="flex items-center gap-2 font-bold text-xl text-slate-900"><i
+                    class="fa-solid fa-t text-white bg-slate-900 w-8 h-8 rounded-full flex items-center justify-center text-sm font-sans"></i>
+                TechBullion</div>
+            <div class="font-black text-lg font-sans tracking-tight text-slate-900 flex leading-tight">
+                <span class="text-blue-600 text-3xl mr-1">B</span>
+                <div class="flex flex-col justify-center text-[10px] leading-tight"><span
+                        class="tracking-widest">BIG</span><span>NEWS</span><span>NETWORK<span
+                            class="text-[6px] text-slate-400 font-normal lowercase tracking-normal">.com</span></span>
+                </div>
+            </div>
+            <div class="font-serif italic text-2xl font-bold text-slate-900 tracking-tight">Khaleej Times</div>
+        </div>
+    </div>
+</div>
+
+<!-- Latest News Section -->
+<div class="py-16 sm:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-end mb-10 border-b border-slate-100 pb-4">
+            <div>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight uppercase">Latest <span
+                        class="text-primary-600">News</span></h2>
+                <p class="mt-2 text-sm text-slate-500">Discover the latest trends, guides, and reviews from the world of
+                    horology.</p>
+            </div>
+            <a href="{{ url_for('main.blogs') }}"
+                class="hidden sm:inline-flex text-sm font-bold text-slate-900 hover:text-primary-600 transition-colors">View
+                All <i class="fa-solid fa-arrow-right ml-2 mt-1"></i></a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- News Card 1 -->
+            <div
+                class="group cursor-pointer bg-slate-50 rounded-2xl overflow-hidden shadow-sm border border-slate-100 hover:shadow-xl hover:border-primary-100 transition-all duration-300 flex flex-col h-full hover:-translate-y-1">
+                <div class="relative h-64 w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+                    <img src="https://images.unsplash.com/photo-1548036328-c928907dcca2?w=800&auto=format&fit=crop"
+                        class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 mix-blend-lighten"
+                        alt="News Image">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-indigo-900/90 via-indigo-900/40 to-transparent p-6 flex items-center justify-center">
+                        <div
+                            class="text-center p-4 border border-indigo-200/30 rounded-2xl backdrop-blur-sm bg-black/20 text-white transform group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-quote-left text-2xl text-amber-400 opacity-80 mb-2"></i>
+                            <p class="text-xs font-black uppercase tracking-widest leading-relaxed">The Ultimate Guide
+                                to Choosing Your First Luxury Timepiece in 2026</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="text-lg font-bold text-slate-900 group-hover:text-primary-600 transition-colors mb-2">The
+                        Ultimate Timepiece Guide</h3>
+                    <p class="text-sm text-slate-500 line-clamp-3 mb-4">Not sure where to start? We break down
+                        everything you need to consider before making that major wrist investment. From automatic to
+                        quartz, understanding movements is key.</p>
+                    <div
+                        class="mt-auto flex items-center justify-center font-bold text-xs text-slate-900 group-hover:text-primary-600 bg-white py-3 rounded-full shadow-sm border border-slate-100 w-full transition-colors">
+                        Read More <i
+                            class="fa-solid fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Card 2 -->
+            <div
+                class="group cursor-pointer bg-slate-50 rounded-2xl overflow-hidden shadow-sm border border-slate-100 hover:shadow-xl hover:border-indigo-100 transition-all duration-300 flex flex-col h-full hover:-translate-y-1">
+                <div class="relative h-64 w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+                    <img src="https://images.unsplash.com/photo-1622434641406-a158123450f9?w=800&auto=format&fit=crop"
+                        class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 mix-blend-lighten"
+                        alt="News Image">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent p-6 flex items-center justify-center">
+                        <div
+                            class="text-center p-4 border border-slate-200/30 rounded-2xl backdrop-blur-sm bg-black/20 text-white transform group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-quote-left text-2xl text-amber-400 opacity-80 mb-2"></i>
+                            <p class="text-xs font-black uppercase tracking-widest leading-relaxed">When Sound Meets
+                                Soul: Watchnetic Onboards Top Global Icons</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors mb-2">When
+                        Sound Meets Soul</h3>
+                    <p class="text-sm text-slate-500 line-clamp-3 mb-4">This is not just an ambassador announcement.
+                        This is the intersection of premium horology and elite storytelling. Read about our new global
+                        face.</p>
+                    <div
+                        class="mt-auto flex items-center justify-center font-bold text-xs text-slate-900 group-hover:text-indigo-600 bg-white py-3 rounded-full shadow-sm border border-slate-100 w-full transition-colors">
+                        Read More <i
+                            class="fa-solid fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Card 3 -->
+            <div
+                class="group cursor-pointer bg-slate-50 rounded-2xl overflow-hidden shadow-sm border border-slate-100 hover:shadow-xl hover:border-slate-300 transition-all duration-300 flex flex-col h-full hover:-translate-y-1">
+                <div class="relative h-64 w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+                    <img src="https://images.unsplash.com/photo-1526045431048-f857369baa09?w=800&auto=format&fit=crop"
+                        class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 mix-blend-lighten"
+                        alt="News Image">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 flex items-center justify-center">
+                        <div class="text-center p-4 transform group-hover:scale-105 transition-transform">
+                            <h2 class="text-xl font-black text-white uppercase tracking-tight mb-1">Watchnetic Launched
+                            </h2>
+                            <p class="text-xs font-bold text-slate-300 uppercase tracking-widest">Global E-commerce Hub
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="text-lg font-bold text-slate-900 group-hover:text-slate-600 transition-colors mb-2">
+                        Watchnetic Launches Global Hub</h3>
+                    <p class="text-sm text-slate-500 line-clamp-3 mb-4">At Watchnetic, we are redefining the industry by
+                        providing top-tier, precision-engineered wearables globally. Explore our brand new experience.
+                    </p>
+                    <div
+                        class="mt-auto flex items-center justify-center font-bold text-xs text-slate-900 group-hover:text-slate-600 bg-white py-3 rounded-full shadow-sm border border-slate-100 w-full transition-colors">
+                        Read More <i
+                            class="fa-solid fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 text-center sm:hidden">
+            <a href="{{ url_for('main.blogs') }}"
+                class="inline-flex items-center px-6 py-2.5 border-2 border-slate-200 text-sm font-semibold rounded-full text-slate-600 bg-white hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all duration-300">
+                View All News
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Personalization Banner -->
+<div class="py-12 bg-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div
+            class="relative bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 rounded-[2.5rem] overflow-hidden shadow-xl border border-white flex flex-col md:flex-row items-center justify-between p-8 md:p-12 lg:p-16 group mx-2">
+            <!-- Abstract Background Typography/Shapes -->
+            <div
+                class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden hidden md:flex">
+                <span
+                    class="text-[clamp(10rem,15vw,25rem)] font-black text-white mix-blend-overlay opacity-50 tracking-tighter whitespace-nowrap select-none w-full text-center">PERSONALIZED</span>
+            </div>
+            <div
+                class="absolute -top-32 -left-32 w-64 h-64 bg-primary-100 rounded-full blur-3xl opacity-50 block pointer-events-none">
+            </div>
+            <div
+                class="absolute -bottom-32 -right-32 w-96 h-96 bg-indigo-100 rounded-full blur-3xl opacity-50 block pointer-events-none">
+            </div>
+
+            <div class="w-full md:w-1/2 relative z-10 text-center md:text-left pt-6 md:pt-0">
+                <h2
+                    class="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-slate-900 uppercase tracking-tight mb-1">
+                    Gift a <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600">Product</span>
+                </h2>
+                <p class="text-lg md:text-xl text-slate-600 font-medium mb-10 md:mb-14">With Name Engraving!</p>
+
+                <button
+                    class="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-sm md:text-base font-bold rounded-full shadow-lg shadow-primary-500/20 text-white bg-slate-900 hover:bg-primary-600 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 group-hover:shadow-primary-500/40">
+                    Customize Now <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                </button>
+                <p class="mt-4 text-[10px] md:text-xs font-bold text-slate-500">*Applicable on prepaid orders only</p>
+            </div>
+
+            <div
+                class="w-full md:w-1/2 relative z-10 flex justify-center mt-16 md:mt-0 flex-col items-center justify-end text-center">
+                <div
+                    class="relative max-w-[16rem] sm:max-w-[20rem] md:max-w-sm group-hover:scale-105 transition-transform duration-700">
+                    <!-- Main Product Image simulating personalized item -->
+                    <img src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=600&auto=format&fit=crop"
+                        class="w-full rounded-[2rem] shadow-2xl rotate-3 border-4 border-white mix-blend-multiply"
+                        alt="Engraved Watch">
+
+                    <!-- Floating Price Tag -->
+                    <div
+                        class="absolute -bottom-8 -left-4 sm:-left-8 md:-left-12 bg-white p-4 md:p-6 rounded-3xl shadow-2xl shadow-slate-300 border border-slate-50 -rotate-[8deg] transform group-hover:-translate-y-2 transition-transform duration-500">
+                        <p class="text-[9px] md:text-xs font-bold text-slate-500 mb-1">Get Personalized</p>
+                        <h3
+                            class="text-xl sm:text-2xl md:text-3xl font-black text-indigo-700 tracking-tight leading-none mb-1">
+                            Engraving</h3>
+                        <p class="text-sm md:text-base font-bold text-slate-900">Rs. 149 only</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

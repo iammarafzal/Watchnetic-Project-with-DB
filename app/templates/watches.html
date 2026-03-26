@@ -11,14 +11,17 @@
                 <p class="mt-2 text-sm text-slate-500">Find the perfect smartwatch to match your style.</p>
             </div>
 
-            <form action="{{ url_for('shop.watches') }}" method="GET" class="w-full md:w-auto">
+            <form action="{{ url_for('shop.watches') }}" method="GET" class="w-full md:w-auto flex justify-end">
                 <select name="sort"
-                    class="block w-full md:w-56 pl-3 pr-8 py-2 text-sm border-slate-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-lg shadow-sm bg-white font-medium text-slate-700"
+                    class="block w-full md:w-56 pl-4 pr-10 py-2.5 text-sm border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 rounded-xl shadow-[0_2px_10px_rgb(0,0,0,0.02)] bg-white font-semibold text-slate-700 appearance-none cursor-pointer transition-all duration-300 hover:shadow-[0_4px_15px_rgb(0,0,0,0.05)] bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394a3b8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_10px] bg-[position:right_1rem_center] bg-no-repeat"
                     onchange="this.form.submit()">
-                    <option value="featured">Sort By: Featured</option>
-                    <option value="price_low">Price: Low to High</option>
-                    <option value="price_high">Price: High to Low</option>
-                    <option value="newest">Newest Arrivals</option>
+                    <option value="featured" {% if current_sort=='featured' %}selected{% endif %}>Sort By: Featured
+                    </option>
+                    <option value="price_low" {% if current_sort=='price_low' %}selected{% endif %}>Price: Low to High
+                    </option>
+                    <option value="price_high" {% if current_sort=='price_high' %}selected{% endif %}>Price: High to Low
+                    </option>
+                    <option value="newest" {% if current_sort=='newest' %}selected{% endif %}>Newest Arrivals</option>
                 </select>
             </form>
         </div>
@@ -75,24 +78,54 @@
             {% endfor %}
         </div>
 
-        {% if products %}
+        {% if pagination.pages > 1 %}
         <!-- Pagination -->
         <div class="mt-16 flex justify-center">
             <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                <a href="#"
-                    class="relative inline-flex items-center px-2 py-2 rounded-l-lg border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50">
+                {% if pagination.has_prev %}
+                <a href="{{ url_for('shop.watches', page=pagination.prev_num, sort=current_sort) }}"
+                    class="relative inline-flex items-center px-3 py-2 rounded-l-lg border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 transition-colors">
                     <span class="sr-only">Previous</span>
                     <i class="fa-solid fa-chevron-left h-5 w-5 flex items-center justify-center"></i>
                 </a>
-                <a href="#" aria-current="page"
-                    class="z-10 bg-primary-50 border-primary-500 text-primary-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">1</a>
-                <a href="#"
-                    class="bg-white border-slate-300 text-slate-500 hover:bg-slate-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">2</a>
-                <a href="#"
-                    class="relative inline-flex items-center px-2 py-2 rounded-r-lg border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50">
+                {% else %}
+                <span
+                    class="relative inline-flex items-center px-3 py-2 rounded-l-lg border border-slate-200 bg-slate-50 text-sm font-medium text-slate-300 cursor-not-allowed">
+                    <span class="sr-only">Previous</span>
+                    <i class="fa-solid fa-chevron-left h-5 w-5 flex items-center justify-center"></i>
+                </span>
+                {% endif %}
+
+                {% for page_num in pagination.iter_pages(left_edge=1, left_current=2, right_current=2, right_edge=1) %}
+                {% if page_num %}
+                {% if pagination.page == page_num %}
+                <span aria-current="page"
+                    class="z-10 bg-slate-900 border-slate-900 text-white relative inline-flex items-center px-4 py-2 border text-sm font-bold">{{
+                    page_num }}</span>
+                {% else %}
+                <a href="{{ url_for('shop.watches', page=page_num, sort=current_sort) }}"
+                    class="bg-white border-slate-300 text-slate-600 hover:bg-slate-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors">{{
+                    page_num }}</a>
+                {% endif %}
+                {% else %}
+                <span
+                    class="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-700">...</span>
+                {% endif %}
+                {% endfor %}
+
+                {% if pagination.has_next %}
+                <a href="{{ url_for('shop.watches', page=pagination.next_num, sort=current_sort) }}"
+                    class="relative inline-flex items-center px-3 py-2 rounded-r-lg border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 transition-colors">
                     <span class="sr-only">Next</span>
                     <i class="fa-solid fa-chevron-right h-5 w-5 flex items-center justify-center"></i>
                 </a>
+                {% else %}
+                <span
+                    class="relative inline-flex items-center px-3 py-2 rounded-r-lg border border-slate-200 bg-slate-50 text-sm font-medium text-slate-300 cursor-not-allowed">
+                    <span class="sr-only">Next</span>
+                    <i class="fa-solid fa-chevron-right h-5 w-5 flex items-center justify-center"></i>
+                </span>
+                {% endif %}
             </nav>
         </div>
         {% endif %}
