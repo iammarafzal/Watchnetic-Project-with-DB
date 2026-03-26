@@ -1,267 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Basic-->
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <!-- Site Metas -->
-  <meta name="keywords" content="wrist watch online, smartphone watch, smart watch for girls, branded watches for women, top 10 smart watches in pakistan with price, watch box for men, hand watch for men, bluetooth watches" />
-  <meta name="description" content="Discover expert insights on wrist watch online, smartphone watch, and smart watch for girls. Explore branded watches for women, hand watch for men, and the best watch box for men. Stay updated on the latest Bluetooth watches and more!" />
-  <meta name="author" content="" />
-  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/x-icon">
-
-  <title>Blogs - Watchnetic</title>
-
-
-  <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-  <!--owl slider stylesheet -->
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-
-  <!-- font awesome style -->
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
-
-  <!-- Custom styles for this template -->
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-  <!-- responsive style -->
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/responsive.css') }}">
-
-  {% block head %}{% endblock %}
-</head>
-<body class="sub_page">
-    <div class="hero_area">
-      <!-- header section strats -->
-      <header class="header_section">
-        <div class="container-fluid">
-          <nav class="navbar navbar-expand-lg custom_nav-container ">
-            <a class="navbar-brand" href="{{ url_for('main.index') }}">
-              <span>
-                Watchnetic
-              </span>
-            </a>
-      
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class=""> </span>
-            </button>
-      
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav">
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('main.index') }}">Home </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('shop.watches') }}"> Watches </a>
-                </li>
-                <li class="nav-item active">
-                  <a class="nav-link" href="{{ url_for('main.blogs') }}"> Blogs <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('main.about') }}"> About </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('main.faqs') }}">FAQs</a>
-                </li>
-              </ul>
-              <div class="user_option-box">
-                {% if 'customer_id' in session %}
-                  <a href="{{ url_for('customer.customer_profile') }}">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                  </a>
-                {% else %}
-                  <a href="{{ url_for('customer.customer_login') }}">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                  </a>
-                {% endif %}
-                <a href="{{ url_for('shop.view_cart') }}" class="position-relative">
-                  <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                  {% if session.get('cart') %}
-                    <span class="cart-badge">{{ session['cart']['count'] }}</span>
-                  {% endif %}
-                </a>
-                <a href="#" data-toggle="modal" data-target="#searchModal">
-                  <i class="fa fa-search" aria-hidden="true"></i>
-                </a>
-              </div>
-            </div>
-          </nav>
+{% extends "base.html" %}
+{% block title %}Blogs - Watchnetic{% endblock %}
+{% block content %}
+<div class="bg-slate-50 py-16 flex-grow min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight sm:text-5xl">Latest <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600">Blogs</span></h1>
+            <p class="mt-4 text-xl text-slate-500 max-w-3xl mx-auto">Discover expert insights, technology trends, and guides for digital watches.</p>
         </div>
-      </header>
-      <!-- end header section -->
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <!-- Blog 1 -->
+            <div class="bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="relative h-64 overflow-hidden bg-slate-100">
+                    <img src="{{ url_for('static', filename='images/blogs/futuristic-smartwatch-holographic-interface.gif') }}" alt="Smartwatch Trends 2025" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-primary-600 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">Trend</div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-primary-600 transition-colors">Smartwatch Trends in 2025</h3>
+                    <p class="text-slate-600 mb-6 flex-grow leading-relaxed">Explore the future of wearable tech with AI integration, health monitoring, and revolutionary displays.</p>
+                    <a href="{{ url_for('main.blog_post', slug='smartwatch-trends-in-2025') }}" class="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors">
+                        Read Article <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Blog 2 -->
+            <div class="bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="relative h-64 overflow-hidden bg-slate-100">
+                    <img src="{{ url_for('static', filename='images/blogs/digital-watch-trends-2025.jpg') }}" alt="2025 Digital Watch Trends" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-primary-600 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">Guide</div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-primary-600 transition-colors">2025 Digital Watch Trends</h3>
+                    <p class="text-slate-600 mb-6 flex-grow leading-relaxed">Discover how digital watches blend tech, style and sustainability in exciting new ways.</p>
+                    <a href="{{ url_for('main.blog_post', slug='2025-digital-watch-trends') }}" class="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors">
+                        Read Article <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Blog 3 -->
+            <div class="bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="relative h-64 overflow-hidden bg-slate-100">
+                    <img src="{{ url_for('static', filename='images/blogs/smartwatch-displaying-health-monitoring-data.jpg') }}" alt="Smartwatch health monitoring" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-primary-600 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">Health</div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-primary-600 transition-colors">Revolutionizing Health Monitoring</h3>
+                    <p class="text-slate-600 mb-6 flex-grow leading-relaxed">Learn how smartwatches transform health tracking with advanced sensors and real-time analysis.</p>
+                    <a href="{{ url_for('main.blog_post', slug='how-smartwatches-are-revolutionizing-health-monitoring') }}" class="inline-flex items-center text-primary-600 font-semibold hover:text-primary-700 transition-colors">
+                        Read Article <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- Search Modal -->
-    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="searchModalLabel">Search Products</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form action="{{ url_for('shop.search') }}" method="get">
-              <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search for watches...">
-                <div class="input-group-append">
-                  <button class="btn btn-primary" type="submit">
-                    <i class="fa fa-search"></i> Search
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Blogs Section -->
-    <section class="blog_section layout_padding">
-      <div class="container">
-        <div class="heading_container heading_center">
-          <h2>
-            Latest Blogs
-          </h2>
-        </div>
-        <div class="blog_wrapper">
-              <div class="blog_card">
-                  <img src="{{ url_for('static', filename='images/blogs/futuristic-smartwatch-holographic-interface.gif') }}" alt="Smartwatch Trends 2025">
-                  <div class="blog_content">
-                      <h3>Smartwatch Trends in 2025</h3>
-                      <p>Explore the future of wearable tech with AI integration, health monitoring, and revolutionary displays.</p>
-                      <a href="{{ url_for('main.blog_post', slug='smartwatch-trends-in-2025') }}" class="read_more_btn">Read More</a>
-                  </div>
-              </div>
-
-              <div class="blog_card">
-                  <img src="{{ url_for('static', filename='images/blogs/digital-watch-trends-2025.jpg') }}" alt="2025 Digital Watch Trends">
-                  <div class="blog_content">
-                      <h3>2025 Digital Watch Trends</h3>
-                      <p>Discover how digital watches blend tech, style and sustainability in exciting new ways.</p>
-                      <a href="{{ url_for('main.blog_post', slug='2025-digital-watch-trends') }}" class="read_more_btn">Read More</a>
-                  </div>
-              </div>
-                    
-              <div class="blog_card">
-                <img src="{{ url_for('static', filename='images/blogs/smartwatch-displaying-health-monitoring-data.jpg') }}" alt="Smartwatch health monitoring">
-                <div class="blog_content">
-                    <h3>Revolutionizing Health Monitoring</h3>
-                    <p>Learn how smartwatches transform health tracking with advanced sensors and real-time analysis.</p>
-                    <a href="{{ url_for('main.blog_post', slug='how-smartwatches-are-revolutionizing-health-monitoring') }}" class="read_more_btn">Read More</a>
-                </div>
-            </div>
-          </div>
-      </div>
-    </section>
-  
-    <!-- Footer Section -->
-    <footer class="footer_section">
-      <div class="footer-top">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-              <div class="footer-widget">
-                <h4 class="widget-title">About Us</h4>
-                <p class="footer-text">Watchnetic offers premium smartwatches and digital watches with cutting-edge technology and stylish designs at affordable prices in Pakistan.</p>
-                <div class="social-icons">
-                  <a href="#" class="social-icon"><i class="fa fa-facebook"></i></a>
-                  <a href="#" class="social-icon"><i class="fa fa-twitter"></i></a>
-                  <a href="#" class="social-icon"><i class="fa fa-instagram"></i></a>
-                  <a href="#" class="social-icon"><i class="fa fa-linkedin"></i></a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-              <div class="footer-widget">
-                <h4 class="widget-title">Quick Links</h4>
-                <ul class="footer-links">
-                  <li><a href="{{ url_for('main.index') }}">Home</a></li>
-                  <li><a href="{{ url_for('shop.watches') }}">Watches</a></li>
-                  <li><a href="{{ url_for('main.blogs') }}">Blogs</a></li>
-                  <li><a href="{{ url_for('main.about') }}">About Us</a></li>
-                  <li><a href="{{ url_for('main.faqs') }}">FAQs</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-              <div class="footer-widget">
-                <h4 class="widget-title">Contact Us</h4>
-                <ul class="contact-info">
-                  <li>
-                    <i class="fa fa-map-marker"></i>
-                    <span>Lahore, Punjab, Pakistan</span>
-                  </li>
-                  <li>
-                    <i class="fa fa-phone"></i>
-                    <span>+92 1234567890</span>
-                  </li>
-                  <li>
-                    <i class="fa fa-envelope"></i>
-                    <span>info@watchnetic.com</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-              <div class="footer-widget">
-                <h4 class="widget-title">Newsletter</h4>
-                <p class="footer-text">Subscribe to get updates on new products and special offers.</p>
-                <form class="newsletter-form">
-                  <div class="input-group">
-                    <input type="email" class="form-control" placeholder="Your Email" required>
-                    <div class="input-group-append">
-                      <button class="btn newsletter-btn" type="submit">
-                        <i class="fa fa-paper-plane"></i>
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-md-6">
-              <p class="copyright-text">
-                &copy; <span id="displayYear"></span> Watchnetic. All Rights Reserved.
-              </p>
-            </div>
-            <div class="col-md-6">
-              <div class="payment-methods text-md-right">
-                <div class="payment-icons">
-                  <i class="fa fa-cc-visa"></i>
-                  <i class="fa fa-cc-mastercard"></i>
-                  <i class="fa fa-cc-paypal"></i>
-                  <i class="fa fa-credit-card"></i>
-                  <i class="fa fa-money"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-    
-    <!-- jQery -->
-    <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
-    <!-- popper js -->
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
-    <!-- bootstrap js -->
-    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
-    <!-- owl slider -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
-    </script>
-    <!-- custom js -->
-    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
-</body>
-</html>
+</div>
+{% endblock %}

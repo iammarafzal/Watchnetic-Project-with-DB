@@ -7,7 +7,6 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 import random
-from db_migrations import run_migrations
 import requests
 from PIL import Image, ImageDraw
 from io import BytesIO
@@ -123,7 +122,7 @@ def create_sample_data():
                 "description": "Luxury timepiece with elegant design and precision movement.",
                 "price": 1299.99,
                 "stock": 10,
-                "image_url": "/static/images/products/watch1.jpg",
+                "image_url": "images/products/watch1_luxury.png",
                 "category": "Luxury"
             },
             {
@@ -131,7 +130,7 @@ def create_sample_data():
                 "description": "The first watch worn on the moon, with chronograph functionality.",
                 "price": 899.99,
                 "stock": 15,
-                "image_url": "/static/images/products/watch2.jpg",
+                "image_url": "images/products/watch2_sports.png",
                 "category": "Sports"
             },
             {
@@ -139,7 +138,7 @@ def create_sample_data():
                 "description": "Water-resistant diver's watch with rotating bezel.",
                 "price": 1099.99,
                 "stock": 8,
-                "image_url": "/static/images/products/watch3.jpg",
+                "image_url": "images/products/watch3_diver.png",
                 "category": "Sports"
             },
             {
@@ -147,7 +146,7 @@ def create_sample_data():
                 "description": "Elegant fusion of traditional watchmaking and modern design.",
                 "price": 799.99,
                 "stock": 12,
-                "image_url": "/static/images/products/watch4.jpg",
+                "image_url": "images/products/watch4_casual.png",
                 "category": "Casual"
             },
             {
@@ -155,15 +154,15 @@ def create_sample_data():
                 "description": "Advanced smartwatch with fitness tracking and notification features.",
                 "price": 349.99,
                 "stock": 20,
-                "image_url": "/static/images/products/watch5.jpg",
+                "image_url": "images/products/watch5_smart.png",
                 "category": "Smart"
             },
             {
                 "name": "Vintage 1965",
-                "description": "Classic timepiece inspired by 1960s design.",
+                "description": "Classic retro gentleman's watch from the 1960s, domed crystal, champagne dial, brown leather strap.",
                 "price": 599.99,
                 "stock": 5,
-                "image_url": "/static/images/products/watch6.jpg",
+                "image_url": "images/products/watch6_vintage.png",
                 "category": "Vintage"
             }
         ]

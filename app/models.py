@@ -50,6 +50,7 @@ class Product(db.Model):
     price = db.Column(db.Numeric(10, 2), nullable=False)
     stock = db.Column(db.Integer, nullable=False)
     image_url = db.Column(db.String(255))
+    additional_images = db.Column(db.JSON, default=list)
     category = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -112,7 +113,7 @@ class Review(db.Model):
     review_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('product.product_id'), nullable=False)
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), nullable=True)
     rating = db.Column(db.Integer, nullable=False)  # Check constraint for rating 1 to 5
     comment = db.Column(db.Text)
     review_date = db.Column(db.DateTime, default=datetime.utcnow)

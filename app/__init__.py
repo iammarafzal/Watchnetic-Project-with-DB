@@ -44,4 +44,7 @@ def create_app(config_name=None):
     app.register_blueprint(shop_bp)
     app.register_blueprint(customer_bp)
 
+    from .cli import register_cli_commands
+    register_cli_commands(app)
+
     return app

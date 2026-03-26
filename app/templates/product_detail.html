@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block title %}{{ product.name }} - Watchnetic{% endblock %}
 {% block content %}
-<div class="bg-slate-50 py-12 lg:py-16 flex-grow">
+<div class="bg-slate-50 py-4 lg:py-6 flex-grow">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Breadcrumbs -->
-        <nav class="flex mb-8" aria-label="Breadcrumb">
+        <nav class="flex mb-4" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
                 <li class="inline-flex items-center">
                     <a href="{{ url_for('main.index') }}"
@@ -15,14 +15,14 @@
                 </li>
                 <li>
                     <div class="flex items-center">
-                        <i class="fa-solid fa-chevron-right text-slate-400 text-xs mx-1"></i>
+                        <i class="fa-solid fa-chevron-right text-slate-400 text-[10px] mx-1"></i>
                         <a href="{{ url_for('shop.watches') }}"
                             class="ml-1 text-sm font-medium text-slate-500 hover:text-primary-600 md:ml-2 transition-colors">Shop</a>
                     </div>
                 </li>
                 <li aria-current="page">
                     <div class="flex items-center">
-                        <i class="fa-solid fa-chevron-right text-slate-400 text-xs mx-1"></i>
+                        <i class="fa-solid fa-chevron-right text-slate-400 text-[10px] mx-1"></i>
                         <span class="ml-1 text-sm font-medium text-slate-900 md:ml-2">{{ product.name }}</span>
                     </div>
                 </li>
@@ -30,33 +30,62 @@
         </nav>
 
         <!-- Product Block -->
-        <div class="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 overflow-hidden">
             <div class="lg:grid lg:grid-cols-2 lg:gap-x-0">
 
-                <!-- Product Image -->
-                <div
-                    class="aspect-w-4 aspect-h-3 sm:aspect-w-3 sm:aspect-h-2 lg:aspect-none lg:h-full bg-slate-50/50 p-8 lg:p-16 flex justify-center items-center relative border-b lg:border-b-0 lg:border-r border-slate-100 min-h-[400px]">
-                    {% if product.stock == 0 %}
-                    <span
-                        class="absolute top-6 right-6 bg-red-100 text-red-700 text-xs font-bold px-4 py-2 rounded-full z-10 border border-red-200 shadow-sm animate-pulse">Out
-                        of Stock</span>
-                    {% endif %}
-                    <img src="{{ product.image_url if product.image_url.startswith('http') else url_for('static', filename=product.image_url) }}"
-                        alt="{{ product.name }}"
-                        class="object-contain lg:h-full lg:w-full max-h-[500px] mix-blend-multiply drop-shadow-2xl hover:scale-105 transition-transform duration-700">
+                <!-- Product Image Gallery -->
+                <div x-data="{ 
+                        mainImage: '{{ product.image_url if product.image_url.startswith('http') else url_for('static', filename=product.image_url) }}',
+                        images: [
+                            '{{ product.image_url if product.image_url.startswith('http') else url_for('static', filename=product.image_url) }}'
+                            {% if product.additional_images %}
+                            {% for img in product.additional_images %}
+                            , '{{ img if img.startswith('http') else url_for('static', filename=img) }}'
+                            {% endfor %}
+                            {% endif %}
+                        ] 
+                    }"
+                    class="flex flex-col-reverse lg:flex-row bg-slate-50/50 border-b lg:border-b-0 lg:border-r border-slate-100 min-h-[300px]">
+
+                    <!-- Thumbnails Sidebar -->
+                    <div
+                        class="flex flex-row lg:flex-col gap-3 p-4 lg:p-6 overflow-x-auto lg:overflow-y-auto w-full lg:w-32 scrollbar-none shrink-0 lg:border-r border-slate-100/50">
+                        <template x-for="(img, idx) in images" :key="idx">
+                            <button @click="mainImage = img"
+                                :class="mainImage === img ? 'ring-2 ring-primary-500 border-transparent shadow-md' : 'border-slate-200 hover:border-primary-300 opacity-60 hover:opacity-100'"
+                                class="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-20 lg:h-20 shrink-0 rounded-xl overflow-hidden border-2 bg-white transition-all duration-300 focus:outline-none p-2 block">
+                                <img :src="img" alt="Thumbnail" class="w-full h-full object-contain mix-blend-multiply">
+                            </button>
+                        </template>
+                    </div>
+
+                    <!-- Main Viewer -->
+                    <div class="relative flex-grow p-6 lg:p-10 flex justify-center items-center overflow-hidden">
+                        {% if product.stock == 0 %}
+                        <span
+                            class="absolute top-6 right-6 bg-red-100 text-red-700 text-xs font-bold px-4 py-1.5 rounded-full z-20 border border-red-200 shadow-sm shadow-red-500/10 flex items-center gap-1.5 backdrop-blur-sm">
+                            <span class="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+                            Out of Stock
+                        </span>
+                        {% endif %}
+                        <img :src="mainImage" alt="{{ product.name }}"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                            class="object-contain w-full h-full max-h-[400px] mix-blend-multiply drop-shadow-2xl hover:scale-105 transition-transform duration-700">
+                    </div>
                 </div>
 
                 <!-- Product Info -->
-                <div class="p-8 lg:p-12 xl:p-16 flex flex-col justify-center">
+                <div class="p-5 lg:p-8 flex flex-col justify-center">
                     <span
-                        class="text-xs font-bold tracking-widest text-primary-600 uppercase mb-3 bg-primary-50 px-3 py-1 rounded-full w-max">{{
+                        class="text-[10px] font-bold tracking-widest text-primary-600 uppercase mb-2 bg-primary-50 px-2.5 py-1 rounded-full w-max">{{
                         product.category|default('Premium Collection', true) }}</span>
                     <h1
-                        class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-2">
+                        class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-2">
                         {{ product.name }}</h1>
 
                     <!-- Rating -->
-                    <div class="mt-4 flex items-center">
+                    <div class="mt-3 flex items-center">
                         <div class="flex items-center text-amber-400 text-sm space-x-1">
                             {% for i in range(1, 6) %}
                             {% if i <= avg_rating %} <i class="fa-solid fa-star"></i>
@@ -66,70 +95,72 @@
                                     {% endif %}
                                     {% endfor %}
                         </div>
-                        <p
-                            class="ml-3 text-sm text-slate-500 font-medium hover:text-primary-600 cursor-pointer transition-colors">
-                            {{ reviews|length }} reviews</p>
+                        <a href="#reviews"
+                            class="ml-3 text-sm text-slate-500 font-medium hover:text-primary-600 cursor-pointer transition-colors underline decoration-slate-300 underline-offset-4">
+                            {{ product.reviews|length }} reviews</a>
                     </div>
 
                     <!-- Price -->
-                    <div class="mt-8 border-y border-slate-100 py-6">
+                    <div class="mt-6 border-y border-slate-100 py-4">
                         <h2 class="sr-only">Product information</h2>
-                        <p class="text-4xl font-black text-slate-900">Rs. {{ "{:,.2f}".format(product.price) }}</p>
+                        <p class="text-3xl font-black text-slate-900">Rs. {{ "{:,.2f}".format(product.price) }}</p>
                     </div>
 
                     <!-- Description -->
-                    <div class="mt-6 flex-grow">
+                    <div class="mt-4 flex-grow">
                         <h3 class="sr-only">Description</h3>
-                        <div class="text-base text-slate-600 space-y-6 leading-relaxed">
+                        <div class="text-sm text-slate-600 space-y-4 leading-relaxed">
                             <p>{{ product.description }}</p>
                         </div>
                     </div>
 
                     <!-- Actions -->
-                    <div class="mt-10">
+                    <div class="mt-8">
                         {% if product.stock > 0 %}
                         <div
-                            class="flex items-center gap-2 mb-6 bg-emerald-50 px-4 py-2 rounded-lg w-max border border-emerald-100">
-                            <span class="flex h-2.5 w-2.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span>
-                            <span class="text-emerald-700 font-medium text-sm">In Stock ({{ product.stock }}
+                            class="flex items-center gap-2 mb-4 bg-emerald-50 px-3 py-1.5 rounded-lg w-max border border-emerald-100">
+                            <span class="flex h-2 w-2 rounded-full bg-emerald-500 mr-1 animate-pulse"></span>
+                            <span class="text-emerald-700 font-medium text-xs">In Stock ({{ product.stock }}
                                 available)</span>
                         </div>
 
                         <form action="{{ url_for('shop.add_to_cart', product_id=product.product_id) }}" method="POST"
-                            class="flex flex-col sm:flex-row gap-4">
+                            class="flex flex-col sm:flex-row gap-3">
 
                             <div
-                                class="flex items-center border-2 border-slate-200 rounded-xl bg-white w-full sm:w-40 overflow-hidden h-14 shadow-sm focus-within:border-primary-500 transition-colors">
+                                class="flex items-center border border-slate-200 rounded-xl bg-white w-full sm:w-32 overflow-hidden h-12 shadow-sm focus-within:border-primary-500 transition-colors">
                                 <button type="button"
-                                    class="w-12 h-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors focus:outline-none font-bold text-lg"
+                                    class="w-10 h-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors focus:outline-none font-bold text-base"
                                     onclick="this.nextElementSibling.stepDown()">-</button>
                                 <input type="number" name="quantity"
-                                    class="w-full h-full text-center font-bold text-slate-900 border-0 focus:ring-0 p-0"
+                                    class="w-full h-full text-center font-bold text-slate-900 border-0 focus:ring-0 p-0 text-sm"
                                     value="1" min="1" max="{{ product.stock }}">
                                 <button type="button"
-                                    class="w-12 h-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors focus:outline-none font-bold text-lg"
+                                    class="w-10 h-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors focus:outline-none font-bold text-base"
                                     onclick="this.previousElementSibling.stepUp()">+</button>
                             </div>
 
                             <button type="submit"
-                                class="flex-1 bg-gradient-to-r from-primary-600 to-indigo-600 border border-transparent rounded-xl py-4 px-8 flex items-center justify-center text-base font-bold text-white shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:from-primary-500 hover:to-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 transition-all duration-300 h-14 transform hover:-translate-y-0.5">
-                                <i class="fa-solid fa-cart-plus mr-3 text-lg"></i> Add to Cart
+                                class="flex-1 bg-gradient-to-r from-primary-600 to-indigo-600 border border-transparent rounded-xl py-3 px-6 flex items-center justify-center text-sm font-bold text-white shadow-md shadow-primary-500/20 hover:shadow-primary-500/40 hover:from-primary-500 hover:to-indigo-500 focus:outline-none transition-all duration-300 h-12 transform hover:-translate-y-0.5">
+                                <i class="fa-solid fa-cart-plus mr-2"></i> Add to Cart
                             </button>
                         </form>
                         {% else %}
-                        <div class="rounded-xl bg-red-50 p-5 border border-red-100 mb-6 shadow-sm">
-                            <div class="flex">
-                                <div class="flex-shrink-0">
-                                    <i class="fa-solid fa-circle-exclamation text-red-500 mt-0.5 text-lg"></i>
+                        <div
+                            class="rounded-xl bg-slate-50 p-5 mt-2 border border-slate-200 shadow-sm flex items-center justify-between group hover:border-slate-300 transition-colors">
+                            <div class="flex items-center">
+                                <div
+                                    class="flex-shrink-0 bg-white p-3 rounded-full shadow-sm border border-slate-100 group-hover:bg-slate-100 transition-colors">
+                                    <i class="fa-solid fa-box-open text-slate-400 text-lg"></i>
                                 </div>
-                                <div class="ml-3 text-left">
-                                    <h3 class="text-sm font-bold text-red-800">Currently out of stock</h3>
-                                    <div class="mt-2 text-sm text-red-700 leading-relaxed">
-                                        <p>This item is highly demanded. Please check back later or explore our related
-                                            products below!</p>
-                                    </div>
+                                <div class="ml-4 text-left">
+                                    <h3 class="text-sm font-bold text-slate-800">Currently out of stock</h3>
+                                    <p class="mt-0.5 text-xs text-slate-500">We're working on restocking. Check back
+                                        soon!</p>
                                 </div>
                             </div>
+                            <button disabled
+                                class="bg-white border border-slate-200 text-slate-400 font-bold py-2.5 px-5 rounded-lg text-xs tracking-wide uppercase cursor-not-allowed hidden sm:block">Unavailable</button>
                         </div>
                         {% endif %}
                     </div>
@@ -137,36 +168,98 @@
             </div>
         </div>
 
+        <!-- Reviews Section -->
+        <div id="reviews"
+            class="mt-12 bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 p-8 lg:p-12">
+            <div class="flex items-center justify-between mb-8 border-b border-slate-100 pb-6">
+                <div>
+                    <h2 class="text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">Customer Reviews</h2>
+                    <p class="mt-1 text-sm text-slate-500">Hear from our community of watch enthusiasts.</p>
+                </div>
+                {% if product.reviews|length > 0 %}
+                <button
+                    class="bg-slate-900 text-white font-bold py-2.5 px-6 rounded-xl hover:bg-slate-800 transition-colors shadow-md text-sm">Write
+                    a Review</button>
+                {% endif %}
+            </div>
+
+            {% if product.reviews|length > 0 %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for review in product.reviews|sort(attribute='review_date', reverse=True) %}
+                <div
+                    class="bg-slate-50 rounded-2xl p-6 border border-slate-100 relative group hover:bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <i
+                        class="fa-solid fa-quote-right absolute top-6 right-6 text-3xl text-slate-200/50 group-hover:text-primary-100 transition-colors"></i>
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="h-10 w-10 rounded-full bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-white font-bold shadow-sm">
+                            {{ review.customer.name[0] | upper }}
+                        </div>
+                        <div class="ml-3">
+                            <h4 class="text-sm font-bold text-slate-900">{{ review.customer.name }}</h4>
+                            <div class="flex text-amber-400 text-[10px] mt-0.5 space-x-0.5">
+                                {% for i in range(1, 6) %}
+                                {% if i <= review.rating %} <i class="fa-solid fa-star"></i>
+                                    {% else %} <i class="fa-regular fa-star text-slate-300"></i>
+                                    {% endif %}
+                                    {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm italic leading-relaxed">"{{ review.comment }}"</p>
+                    <p class="mt-4 text-[10px] text-slate-400 font-medium uppercase tracking-wider">{{
+                        review.review_date.strftime('%b %d, %Y') }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!-- Empty state for zero reviews -->
+            <div
+                class="text-center py-16 px-4 sm:px-6 lg:px-8 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                <div class="mx-auto h-20 w-20 bg-white shadow-sm rounded-full flex items-center justify-center mb-5">
+                    <i class="fa-regular fa-star-half-stroke text-3xl text-primary-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">No reviews yet</h3>
+                <p class="text-slate-500 mb-8 max-w-md mx-auto text-sm leading-relaxed">This product hasn't been
+                    reviewed yet. Be the first to share your thoughts and help others make an informed decision!</p>
+                <button
+                    class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-bold rounded-xl shadow-md text-white bg-gradient-to-r from-primary-600 to-indigo-600 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+                    <i class="fa-solid fa-pen-nib mr-2"></i> Be the first to review
+                </button>
+            </div>
+            {% endif %}
+        </div>
+
         <!-- Related Products -->
         {% if related_products %}
-        <div class="mt-20">
-            <div class="flex items-center justify-between mb-8 text-slate-900">
+        <div class="mt-10">
+            <div class="flex items-center justify-between mb-6 text-slate-900">
                 <h2
-                    class="text-2xl lg:text-3xl font-extrabold tracking-tight border-b-2 border-primary-500 pb-2 inline-block">
+                    class="text-xl lg:text-2xl font-extrabold tracking-tight border-b-2 border-primary-500 pb-1.5 inline-block">
                     You may also <span
                         class="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600">Like</span>
                 </h2>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {% for related in related_products %}
                 <div
-                    class="group bg-white rounded-2xl overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col h-full transform transition-all duration-300 hover:shadow-[0_10px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1">
+                    class="group bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100 flex flex-col h-full transform transition-all duration-300 hover:shadow-md hover:-translate-y-1">
                     <div
-                        class="relative h-56 bg-slate-50 p-6 flex justify-center items-center overflow-hidden border-b border-slate-50">
+                        class="relative h-48 bg-slate-50 p-4 flex justify-center items-center overflow-hidden border-b border-slate-50">
                         <img src="{{ related.image_url if related.image_url.startswith('http') else url_for('static', filename=related.image_url) }}"
                             alt="{{ related.name }}"
                             class="max-h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500">
                     </div>
-                    <div class="p-5 flex flex-col flex-grow text-center">
+                    <div class="p-4 flex flex-col flex-grow text-center">
                         <h3
-                            class="text-base font-bold text-slate-800 mb-1 group-hover:text-primary-600 transition-colors">
+                            class="text-sm font-bold text-slate-800 mb-1 group-hover:text-primary-600 transition-colors">
                             {{ related.name }}</h3>
-                        <p class="text-xl font-black text-slate-900 mt-auto mb-4">Rs. {{ "{:,.2f}".format(related.price)
+                        <p class="text-lg font-black text-slate-900 mt-auto mb-3">Rs. {{ "{:,.2f}".format(related.price)
                             }}</p>
                         <a href="{{ url_for('shop.product_detail', product_id=related.product_id) }}"
-                            class="block w-full text-center px-4 py-2 border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 hover:text-slate-900 hover:border-slate-300 transition-colors duration-300">View
-                            Details</a>
+                            class="block w-full text-center px-3 py-1.5 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-50 hover:text-slate-900 hover:border-slate-300 transition-colors duration-300">Buy
+                            Now</a>
                     </div>
                 </div>
                 {% endfor %}
