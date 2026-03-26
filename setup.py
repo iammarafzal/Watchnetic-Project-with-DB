@@ -1,5 +1,7 @@
-from flask import Flask
-from models import db, Admin, Product, Customer, Orders, Order_Detail, Review, Payment, Shipping
+from app import create_app
+from flask import current_app
+from app.extensions import db
+from app.models import Admin, Product, Customer, Orders, Order_Detail, Review, Payment, Shipping
 from werkzeug.security import generate_password_hash
 import os
 from dotenv import load_dotenv
@@ -14,23 +16,20 @@ from io import BytesIO
 load_dotenv()
 
 # Create Flask app
-app = Flask(__name__)
+app = create_app()
 
 # Configure database
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'mysql://root@localhost/watchnetic_db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///watchnetic.db')
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
-db.init_app(app)
+# db.init_app(app)
 
 def setup_database():
     """Initialize database and create tables"""
     with app.app_context():
         print("Creating database tables...")
         db.create_all()
-        
-        # Run migrations to ensure all columns are in place
-        run_migrations()
         
         print("Database setup complete!")
 

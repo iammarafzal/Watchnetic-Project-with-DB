@@ -1,6 +1,7 @@
 import click
 from flask.cli import with_appcontext
-from models import db, Admin, Product, Customer
+from app.extensions import db
+from app.models import Admin, Product, Customer
 from werkzeug.security import generate_password_hash
 import os
 import csv

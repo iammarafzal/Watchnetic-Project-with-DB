@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Your Cart - Watchnetic{% endblock %}
+{% block content %}
+<div class="bg-slate-50 py-12 flex-grow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight mb-8">Shopping <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600">Cart</span></h1>
+
+        {% if cart_items %}
+        <div class="lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start">
+            <div class="lg:col-span-8">
+                <div
+                    class="bg-white shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-3xl overflow-hidden border border-slate-100">
+                    <ul role="list" class="divide-y divide-slate-100">
+                        {% for item in cart_items %}
+                        <li class="flex py-6 sm:py-8 px-6 sm:px-8">
+                            <div
+                                class="flex-shrink-0 relative w-24 h-24 sm:w-32 sm:h-32 bg-slate-50 rounded-xl overflow-hidden flex items-center justify-center border border-slate-100">
+                                <img src="{{ item.image_url if item.image_url.startswith('http') else url_for('static', filename=item.image_url) }}"
+                                    alt="{{ item.name }}" class="max-h-full object-contain mix-blend-multiply p-2">
+                            </div>
+
+                            <div class="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
+                                <div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+                                    <div>
+                                        <div class="flex justify-between">
+                                            <h3 class="text-lg font-bold">
+                                                <a href="{{ url_for('shop.product_detail', product_id=item.product_id) }}"
+                                                    class="text-slate-800 hover:text-primary-600 transition-colors">{{
+                                                    item.name }}</a>
+                                            </h3>
+                                        </div>
+                                        <p class="mt-1 text-sm font-bold text-primary-600">Rs. {{
+                                            "{:,.2f}".format(item.price) }}</p>
+                                    </div>
+
+                                    <div class="mt-4 sm:mt-0 sm:pr-9">
+                                        <form action="{{ url_for('shop.update_cart', product_id=item.product_id) }}"
+                                            method="POST" class="flex items-center">
+                                            <div
+                                                class="flex items-center border border-slate-200 rounded-lg bg-white overflow-hidden shadow-sm h-10 w-28 focus-within:border-primary-500 transition-colors">
+                                                <button type="submit" onclick="this.nextElementSibling.stepDown()"
+                                                    class="w-8 h-full text-slate-500 hover:bg-slate-50 transition-colors font-bold focus:outline-none">-</button>
+                                                <input type="number" name="quantity"
+                                                    class="w-full text-center text-sm font-semibold text-slate-900 border-0 focus:ring-0 p-0 h-full bg-transparent"
+                                                    value="{{ item.quantity }}" min="1" onchange="this.form.submit()">
+                                                <button type="submit" onclick="this.previousElementSibling.stepUp()"
+                                                    class="w-8 h-full text-slate-500 hover:bg-slate-50 transition-colors font-bold focus:outline-none">+</button>
+                                            </div>
+                                        </form>
+
+                                        <div class="absolute top-0 right-0">
+                                            <a href="{{ url_for('shop.remove_from_cart', product_id=item.product_id) }}"
+                                                class="-m-2 p-2 inline-flex text-slate-400 hover:text-red-500 transition-colors">
+                                                <span class="sr-only">Remove</span>
+                                                <i class="fa-solid fa-trash-can text-lg"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="mt-4 flex text-sm text-slate-500 space-x-2">
+                                    <i class="fa-solid fa-check text-emerald-500 mt-0.5"></i>
+                                    <span>In stock</span>
+                                </p>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div
+                        class="p-6 bg-slate-50/50 border-t border-slate-100 flex justify-between items-center rounded-b-3xl">
+                        <a href="{{ url_for('shop.clear_cart') }}"
+                            class="text-sm font-bold text-red-500 hover:text-red-700 transition-colors">
+                            <i class="fa-solid fa-broom mr-1"></i> Clear Cart
+                        </a>
+                        <a href="{{ url_for('shop.watches') }}"
+                            class="text-sm font-bold text-primary-600 hover:text-primary-700 transition-colors">
+                            Continue Shopping &rarr;
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 lg:mt-0 lg:col-span-4">
+                <div
+                    class="bg-white shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-3xl border border-slate-100 px-6 py-8 sm:p-8">
+                    <h2 class="text-xl font-extrabold text-slate-900 mb-6 border-b border-slate-100 pb-4">Order Summary
+                    </h2>
+
+                    <dl class="space-y-4 text-sm text-slate-600">
+                        <div class="flex items-center justify-between">
+                            <dt class="font-medium">Subtotal</dt>
+                            <dd class="font-bold text-slate-900">Rs. {{ "{:,.2f}".format(total) }}</dd>
+                        </div>
+                        <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+                            <dt class="flex items-center font-medium">
+                                <span>Shipping estimate</span>
+                            </dt>
+                            <dd class="font-bold text-slate-900">Free</dd>
+                        </div>
+                        <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+                            <dt class="font-medium">Tax estimate</dt>
+                            <dd class="font-bold text-slate-900">Rs. 0.00</dd>
+                        </div>
+                        <div class="flex items-center justify-between border-t border-slate-200 pt-6">
+                            <dt class="text-lg font-extrabold text-slate-900">Order Total</dt>
+                            <dd class="text-xl font-black text-primary-600">Rs. {{ "{:,.2f}".format(total) }}</dd>
+                        </div>
+                    </dl>
+
+                    <div class="mt-8">
+                        <a href="{{ url_for('shop.checkout') }}"
+                            class="w-full flex justify-center items-center px-4 py-4 border border-transparent rounded-xl shadow-[0_10px_20px_rgba(37,99,235,0.25)] text-base font-bold text-white bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-500 hover:to-indigo-500 focus:outline-none transition-all transform hover:-translate-y-0.5">
+                            Proceed to Checkout <i class="fa-solid fa-lock ml-2"></i>
+                        </a>
+                    </div>
+
+                    <div class="mt-6 flex justify-center gap-4 text-slate-300 text-2xl">
+                        <i class="fa-brands fa-cc-visa"></i>
+                        <i class="fa-brands fa-cc-mastercard"></i>
+                        <i class="fa-brands fa-cc-paypal"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-24 bg-white rounded-3xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100">
+            <div class="mx-auto h-24 w-24 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                <i class="fa-solid fa-cart-arrow-down text-4xl text-slate-300"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-2">Your cart is empty</h2>
+            <p class="text-slate-500 mb-8 max-w-sm mx-auto">Looks like you haven't added any items to your cart yet.
+                Discover something perfect for you!</p>
+            <a href="{{ url_for('shop.watches') }}"
+                class="inline-flex items-center px-8 py-3.5 border border-transparent text-base font-bold rounded-xl shadow-[0_8px_15px_rgba(37,99,235,0.25)] text-white bg-primary-600 hover:bg-primary-500 transition-all transform hover:-translate-y-0.5">
+                Start Shopping
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

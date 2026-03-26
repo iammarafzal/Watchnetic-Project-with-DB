@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} - Watchnetic{% endblock %}
+{% block content %}
+<div class="bg-slate-50 py-12 lg:py-16 flex-grow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Breadcrumbs -->
+        <nav class="flex mb-8" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="{{ url_for('main.index') }}"
+                        class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-primary-600 transition-colors">
+                        <i class="fa-solid fa-house mr-2 hover:animate-pulse"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-chevron-right text-slate-400 text-xs mx-1"></i>
+                        <a href="{{ url_for('shop.watches') }}"
+                            class="ml-1 text-sm font-medium text-slate-500 hover:text-primary-600 md:ml-2 transition-colors">Shop</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-chevron-right text-slate-400 text-xs mx-1"></i>
+                        <span class="ml-1 text-sm font-medium text-slate-900 md:ml-2">{{ product.name }}</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Product Block -->
+        <div class="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-x-0">
+
+                <!-- Product Image -->
+                <div
+                    class="aspect-w-4 aspect-h-3 sm:aspect-w-3 sm:aspect-h-2 lg:aspect-none lg:h-full bg-slate-50/50 p-8 lg:p-16 flex justify-center items-center relative border-b lg:border-b-0 lg:border-r border-slate-100 min-h-[400px]">
+                    {% if product.stock == 0 %}
+                    <span
+                        class="absolute top-6 right-6 bg-red-100 text-red-700 text-xs font-bold px-4 py-2 rounded-full z-10 border border-red-200 shadow-sm animate-pulse">Out
+                        of Stock</span>
+                    {% endif %}
+                    <img src="{{ product.image_url if product.image_url.startswith('http') else url_for('static', filename=product.image_url) }}"
+                        alt="{{ product.name }}"
+                        class="object-contain lg:h-full lg:w-full max-h-[500px] mix-blend-multiply drop-shadow-2xl hover:scale-105 transition-transform duration-700">
+                </div>
+
+                <!-- Product Info -->
+                <div class="p-8 lg:p-12 xl:p-16 flex flex-col justify-center">
+                    <span
+                        class="text-xs font-bold tracking-widest text-primary-600 uppercase mb-3 bg-primary-50 px-3 py-1 rounded-full w-max">{{
+                        product.category|default('Premium Collection', true) }}</span>
+                    <h1
+                        class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-2">
+                        {{ product.name }}</h1>
+
+                    <!-- Rating -->
+                    <div class="mt-4 flex items-center">
+                        <div class="flex items-center text-amber-400 text-sm space-x-1">
+                            {% for i in range(1, 6) %}
+                            {% if i <= avg_rating %} <i class="fa-solid fa-star"></i>
+                                {% elif i - 0.5 <= avg_rating %} <i class="fa-solid fa-star-half-stroke"></i>
+                                    {% else %}
+                                    <i class="fa-regular fa-star text-slate-300"></i>
+                                    {% endif %}
+                                    {% endfor %}
+                        </div>
+                        <p
+                            class="ml-3 text-sm text-slate-500 font-medium hover:text-primary-600 cursor-pointer transition-colors">
+                            {{ reviews|length }} reviews</p>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="mt-8 border-y border-slate-100 py-6">
+                        <h2 class="sr-only">Product information</h2>
+                        <p class="text-4xl font-black text-slate-900">Rs. {{ "{:,.2f}".format(product.price) }}</p>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mt-6 flex-grow">
+                        <h3 class="sr-only">Description</h3>
+                        <div class="text-base text-slate-600 space-y-6 leading-relaxed">
+                            <p>{{ product.description }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="mt-10">
+                        {% if product.stock > 0 %}
+                        <div
+                            class="flex items-center gap-2 mb-6 bg-emerald-50 px-4 py-2 rounded-lg w-max border border-emerald-100">
+                            <span class="flex h-2.5 w-2.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span>
+                            <span class="text-emerald-700 font-medium text-sm">In Stock ({{ product.stock }}
+                                available)</span>
+                        </div>
+
+                        <form action="{{ url_for('shop.add_to_cart', product_id=product.product_id) }}" method="POST"
+                            class="flex flex-col sm:flex-row gap-4">
+
+                            <div
+                                class="flex items-center border-2 border-slate-200 rounded-xl bg-white w-full sm:w-40 overflow-hidden h-14 shadow-sm focus-within:border-primary-500 transition-colors">
+                                <button type="button"
+                                    class="w-12 h-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors focus:outline-none font-bold text-lg"
+                                    onclick="this.nextElementSibling.stepDown()">-</button>
+                                <input type="number" name="quantity"
+                                    class="w-full h-full text-center font-bold text-slate-900 border-0 focus:ring-0 p-0"
+                                    value="1" min="1" max="{{ product.stock }}">
+                                <button type="button"
+                                    class="w-12 h-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors focus:outline-none font-bold text-lg"
+                                    onclick="this.previousElementSibling.stepUp()">+</button>
+                            </div>
+
+                            <button type="submit"
+                                class="flex-1 bg-gradient-to-r from-primary-600 to-indigo-600 border border-transparent rounded-xl py-4 px-8 flex items-center justify-center text-base font-bold text-white shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:from-primary-500 hover:to-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 transition-all duration-300 h-14 transform hover:-translate-y-0.5">
+                                <i class="fa-solid fa-cart-plus mr-3 text-lg"></i> Add to Cart
+                            </button>
+                        </form>
+                        {% else %}
+                        <div class="rounded-xl bg-red-50 p-5 border border-red-100 mb-6 shadow-sm">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fa-solid fa-circle-exclamation text-red-500 mt-0.5 text-lg"></i>
+                                </div>
+                                <div class="ml-3 text-left">
+                                    <h3 class="text-sm font-bold text-red-800">Currently out of stock</h3>
+                                    <div class="mt-2 text-sm text-red-700 leading-relaxed">
+                                        <p>This item is highly demanded. Please check back later or explore our related
+                                            products below!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        {% if related_products %}
+        <div class="mt-20">
+            <div class="flex items-center justify-between mb-8 text-slate-900">
+                <h2
+                    class="text-2xl lg:text-3xl font-extrabold tracking-tight border-b-2 border-primary-500 pb-2 inline-block">
+                    You may also <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600">Like</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for related in related_products %}
+                <div
+                    class="group bg-white rounded-2xl overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col h-full transform transition-all duration-300 hover:shadow-[0_10px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1">
+                    <div
+                        class="relative h-56 bg-slate-50 p-6 flex justify-center items-center overflow-hidden border-b border-slate-50">
+                        <img src="{{ related.image_url if related.image_url.startswith('http') else url_for('static', filename=related.image_url) }}"
+                            alt="{{ related.name }}"
+                            class="max-h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow text-center">
+                        <h3
+                            class="text-base font-bold text-slate-800 mb-1 group-hover:text-primary-600 transition-colors">
+                            {{ related.name }}</h3>
+                        <p class="text-xl font-black text-slate-900 mt-auto mb-4">Rs. {{ "{:,.2f}".format(related.price)
+                            }}</p>
+                        <a href="{{ url_for('shop.product_detail', product_id=related.product_id) }}"
+                            class="block w-full text-center px-4 py-2 border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 hover:text-slate-900 hover:border-slate-300 transition-colors duration-300">View
+                            Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
